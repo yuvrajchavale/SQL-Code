@@ -1,0 +1,33 @@
+=====Pivot===
+select 'Totalsales' as [group],[europe],[north america],[pacific]
+from
+
+(
+select salesytd,[group]from SalesTerritory
+) as tabletopivot
+
+pivot
+(
+sum(salesytd)
+for [group] in ([europe],[north america],[pacific])
+) as pivottable
+============Unpivot==============================
+select [group],sales
+from
+
+(
+select [europe],[north america],[pacific] from #temp1
+) TP
+unpivot
+(
+sales for [group]
+in ([europe],[north america],[pacific]))
+as up
+========================================
+/*
+differences b/w clustered n nonclustered
+
+1. Only one clustered index per table, where as you can have more than one non clustered index
+2. Clustered index is faster than a non clustered index, because, the clustered index has to refer back to the table, if the selected column is not present in the index.
+3. Clustered index determines the storage order of rows in the table, and hence doesn't require additional disk space, but where as a Non Clustered index is stored separately from the table, additional storage space is required.
+*/
